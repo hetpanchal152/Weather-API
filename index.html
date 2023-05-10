@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<title>OpenWeatherMap API Demo</title>
+	<script type="text/javascript">
+		function getWeather(city) {
+			var apiKey = '9358f229956f51f95f84dd8928723656'; // replace with your API key
+			var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey;
+
+			fetch(apiUrl)
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(data) {
+					var weather = data.weather[0].main;
+					var temp = Math.round(data.main.temp - 273.15);
+					var description = data.weather[0].description;
+					var icon = data.weather[0].icon;
+					var cityName = data.name;
+
+					document.getElementById('city').innerHTML = cityName;
+					document.getElementById('weather').innerHTML = weather;
+					document.getElementById('temperature').innerHTML = temp + '°C';
+					document.getElementById('description').innerHTML = description;
+					document.getElementById('icon').src = 'http://openweathermap.org/img/w/' + icon + '.png';
+				})
+				.catch(function(error) {
+					console.log(error);
+				});
+		}
+	</script>
+</head>
+<body>
+	<!-- body starts from here -->
+	<h1>OpenWeatherMap API Demo</h1>
+	<!-- City will be entered here -->
+	<label id="details" for="city">Enter a city name:</label>
+	<input type="text" id="city" placeholder="e.g. London">
+	<!-- Weather will get from here -->
+	<button onclick="getWeather(document.getElementById('city').value)">Get Weather</button>
+	<hr>
+	<h2>Current Weather in <span id="cityName"></span></h2>
+	<p><img id="icon"></p>
+	<p class="description"><strong>Weather:</strong> <span id="weather"></span></p>
+	<p class="description"><strong>Temperature:</strong> <span id="temperature"></span></p>
+	<p class="description"><strong>Description:</strong> <span id="description"></span></p>
+</body>
+</html>
